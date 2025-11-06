@@ -2,9 +2,9 @@ base_model: NousResearch/Meta-Llama-3-8B-Instruct
 model_type: AutoModelForCausalLM
 tokenizer_type: AutoTokenizer
 
-dataloader_num_workers: 8
+dataloader_num_workers: 12
 
-max_grad_norm: 0.8
+max_grad_norm: 1
 
 
 load_in_8bit: false
@@ -17,46 +17,46 @@ dataset_prepared_path:
 val_set_size: 0.0
 output_dir: miner_id_24_lowloss
 
-sequence_len: 1024
+sequence_len: 512
 sample_packing: false
 pad_to_sequence_len: true
 trust_remote_code: true
 
 adapter: lora
 lora_model_dir:
-lora_r: 16
-lora_alpha: 32
-lora_dropout: 0.1
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
 lora_target_linear: true
 lora_fan_in_fan_out:
 
 loraplus_lr_embedding: 1.0e-06
 loraplus_lr_ratio: 16
 
-gradient_accumulation_steps: 4
-micro_batch_size: 1
-num_epochs: 5
+gradient_accumulation_steps: 2
+micro_batch_size: 2
+num_epochs: 200
 
-optimizer: adamw_bnb_8bit
+optimizer: adamw_torch_fused
 
 lr_scheduler: cosine_with_restarts
-learning_rate: 0.00008
+learning_rate: 0.0001
 
 train_on_inputs: false
-group_by_length: true
-bf16: true
-fp16: false
-tf32: true
+group_by_length: false
+bf16: auto
+fp16:
+tf32: false
 
-gradient_checkpointing: true
-early_stopping_patience: 3
-eval_steps: 200
+gradient_checkpointing: false
+early_stopping_patience: 
+eval_steps: 
 save_steps: 300
 
 
 resume_from_checkpoint:
 local_rank:
-logging_steps:
+logging_steps: 1
 xformers_attention:
 flash_attention: true
 s2_attention:
@@ -73,8 +73,8 @@ hub_strategy: checkpoint
 hub_token:
 
 
-saves_per_epoch: 2
-save_total_limit: 5
+saves_per_epoch: 4
+save_total_limit: 10
 warmup_steps: 150
 evals_per_epoch: 4
 eval_table_size: 64
