@@ -3,7 +3,7 @@ import uuid
 
 import toml
 import yaml
-from fiber.logging_utils import get_logger
+from logging_utils import get_logger
 from transformers import AutoTokenizer
 
 import core.constants as cst
